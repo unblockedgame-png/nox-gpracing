@@ -101,19 +101,19 @@
   #pauseBtn:hover{ border-color:var(--yellow-warn); }
 
   #leaderboard{
-    position:absolute; bottom:14px; right:14px; width:104px; max-height:150px;
-    overflow-y:auto; background:rgba(10,12,15,0.55); border:1px solid rgba(255,255,255,0.08);
-    border-right:2px solid var(--yellow-warn); padding:4px 6px; pointer-events:auto;
-    font-family:'JetBrains Mono',monospace; font-size:9px;
+    position:absolute; bottom:14px; right:14px; width:126px; max-height:190px;
+    overflow-y:auto; background:rgba(10,12,15,0.6); border:1px solid rgba(255,255,255,0.08);
+    border-right:2px solid var(--yellow-warn); padding:5px 7px; pointer-events:auto;
+    font-family:'JetBrains Mono',monospace; font-size:10px;
   }
   #leaderboard::-webkit-scrollbar{ width:3px; }
   #leaderboard::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.2); }
   .lb-row{
-    display:flex; align-items:center; gap:4px; padding:2px 0;
+    display:flex; align-items:center; gap:5px; padding:2.5px 0;
     border-bottom:1px solid rgba(255,255,255,0.05); white-space:nowrap;
   }
-  .lb-row .lb-pos{ color:var(--text-dim); width:15px; flex-shrink:0; }
-  .lb-row .lb-chip{ width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .lb-row .lb-pos{ color:var(--text-dim); width:17px; flex-shrink:0; }
+  .lb-row .lb-chip{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
   .lb-row .lb-name{ overflow:hidden; text-overflow:ellipsis; }
   .lb-row.me{ color:var(--yellow-warn); font-weight:700; }
 
@@ -208,6 +208,52 @@
     transition:border-color .15s, color .15s;
   }
   .corner-home-btn:hover{ border-color:var(--yellow-warn); color:#fff; }
+
+  .username-input{
+    margin-top:14px; width:100%; max-width:280px; pointer-events:all;
+    background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.2);
+    border-radius:4px; color:#fff; text-align:center; text-transform:uppercase;
+    font-family:'Titillium Web',sans-serif; font-weight:700; font-size:18px;
+    letter-spacing:2px; padding:12px 14px;
+  }
+  .username-input:focus{ outline:none; border-color:var(--red-race); box-shadow:0 0 14px rgba(225,6,0,0.4); }
+  .username-input::placeholder{ color:var(--text-dim); letter-spacing:2px; }
+
+  .design-preview{
+    background:radial-gradient(ellipse at center, #14181d, #05070a);
+    border:1px solid rgba(255,255,255,0.1); border-radius:6px; margin:4px 0 8px;
+  }
+  .design-section{ width:100%; max-width:340px; margin:6px 0; text-align:left; pointer-events:all; }
+  .design-label{
+    font-size:10px; letter-spacing:2px; color:var(--text-dim);
+    font-family:'JetBrains Mono',monospace; margin-bottom:5px;
+  }
+  .swatch-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .swatch{
+    width:26px; height:26px; border-radius:50%; cursor:pointer;
+    border:2px solid rgba(255,255,255,0.15); transition:transform .1s, border-color .1s;
+  }
+  .swatch:hover{ transform:translateY(-2px); }
+  .swatch.selected{ border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,0.25); }
+
+  .option-row{ display:flex; flex-wrap:wrap; gap:7px; }
+  .opt-btn{
+    pointer-events:all; cursor:pointer; background:rgba(255,255,255,0.04);
+    border:1.5px solid rgba(255,255,255,0.14); color:var(--text-dim);
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:1px; font-weight:700;
+    padding:7px 11px; border-radius:4px; transition:border-color .15s, color .15s;
+  }
+  .opt-btn.selected{ border-color:var(--red-race); color:#fff; background:rgba(225,6,0,0.15); }
+
+  .design-number-row{ display:flex; align-items:center; gap:10px; }
+  .design-number-row .design-label{ margin-bottom:0; }
+  .number-input{
+    width:60px; pointer-events:all; background:rgba(255,255,255,0.05);
+    border:1.5px solid rgba(255,255,255,0.2); border-radius:4px; color:#fff;
+    text-align:center; font-family:'JetBrains Mono',monospace; font-weight:700;
+    font-size:16px; padding:6px 4px;
+  }
+  .number-input:focus{ outline:none; border-color:var(--red-race); }
 
   .calendar-strip{
     display:flex; gap:6px; overflow-x:auto; width:100%; max-width:560px; padding:4px 2px 8px;
@@ -341,10 +387,47 @@
     </div>
   </div>
 
-  <div class="overlay" id="startOverlay">
+  <div class="overlay" id="usernameOverlay">
+    <div class="eyebrow">WELCOME TO NOX GP</div>
+    <h1 class="title" style="font-size:34px;">ENTER YOUR NAME</h1>
+    <div class="sub">This is how you'll appear on the leaderboard and career standings in every race.</div>
+    <input type="text" id="usernameInput" maxlength="14" placeholder="YOUR NAME" class="username-input" autocomplete="off">
+    <button class="start-btn" id="usernameSubmitBtn">CONTINUE</button>
+  </div>
+
+  <div class="overlay hidden" id="designOverlay">
+    <div class="eyebrow">CAR CUSTOMIZATION</div>
+    <h1 class="title" style="font-size:30px;">DESIGN YOUR CAR</h1>
+    <canvas id="designPreview" width="260" height="150" class="design-preview"></canvas>
+
+    <div class="design-section">
+      <div class="design-label">PRIMARY COLOR</div>
+      <div class="swatch-row" id="primarySwatches"></div>
+    </div>
+    <div class="design-section">
+      <div class="design-label">SECONDARY COLOR</div>
+      <div class="swatch-row" id="secondarySwatches"></div>
+    </div>
+    <div class="design-section">
+      <div class="design-label">LIVERY PATTERN</div>
+      <div class="option-row" id="patternOptions"></div>
+    </div>
+    <div class="design-section">
+      <div class="design-label">DECAL</div>
+      <div class="option-row" id="decalOptions"></div>
+    </div>
+    <div class="design-section design-number-row">
+      <div class="design-label">CAR NUMBER</div>
+      <input type="text" id="carNumberInput" maxlength="2" inputmode="numeric" class="number-input" value="7">
+    </div>
+
+    <button class="start-btn" id="designContinueBtn">CONTINUE</button>
+  </div>
+
+  <div class="overlay hidden" id="startOverlay">
     <div class="eyebrow">ARCADE GRAND PRIX</div>
     <h1 class="title">NOX GP</h1>
-    <div class="sub">Arrow keys or WASD to steer. Race one-off on any circuit, or take on a full 10-race career season.</div>
+    <div class="sub">Arrow keys or WASD to steer. Race one-off on any circuit, or take on a full 24-race career season.</div>
     <button class="start-btn" id="quickRaceBtn">QUICK RACE</button>
     <button class="start-btn ghost-btn" id="careerModeBtn">CAREER MODE</button>
     <div class="save-load-row">
@@ -412,16 +495,23 @@
       <div id="careerStandingsWrap"></div>
     </div>
     <div class="prompt" id="resultsPrompt">TAP TO CONTINUE</div>
+    <div class="qualy-choice-row hidden" id="seasonChoiceRow">
+      <button class="start-btn ghost-btn" id="seasonHomeBtn">MAIN MENU</button>
+      <button class="start-btn" id="nextSeasonBtn">START SEASON 2</button>
+    </div>
   </div>
 
   <div class="overlay hidden" id="nextRaceOverlay">
-    <div class="eyebrow">UP NEXT — RACE <span id="nextRaceNum">2 / 10</span></div>
+    <div class="eyebrow">UP NEXT — <span id="nextRaceNum">S1 · 2 / 10</span></div>
     <h1 class="title" id="nextRaceName" style="font-size:30px;">TRACK NAME</h1>
     <div class="sub" id="nextRaceTag">Track description.</div>
     <div class="track-cards" style="grid-template-columns:1fr; max-width:260px;">
       <div class="track-card selected" style="cursor:default;" id="nextRacePreview"></div>
     </div>
-    <div class="prompt">TAP TO START THIS RACE</div>
+    <div class="qualy-choice-row">
+      <button class="start-btn ghost-btn" id="nextSkipQualyBtn">SKIP QUALIFYING</button>
+      <button class="start-btn" id="nextStartQualyBtn">START QUALIFYING</button>
+    </div>
   </div>
 
   <div class="overlay hidden" id="pauseOverlay">
@@ -580,6 +670,76 @@
       width:160, drsFrom:0, drsTo:1, kerb:'#C0C4C8', baseSpeed:288, topSpeed:328,
       points: compoundLoop(0,0,385,245,22,[{freq:3,amp:0.14,phase:1.2},{freq:1,amp:0.06,phase:0}]),
     },
+    {
+      id:'dune', name:'DUNE CIRCUIT', tagline:'Wide desert curves and heavy braking zones, Bahrain-inspired.',
+      width:165, drsFrom:0, drsTo:1, kerb:'#D4A017', baseSpeed:290, topSpeed:330,
+      points: compoundLoop(0,0,400,245,24,[{freq:3,amp:0.14,phase:0.5},{freq:6,amp:0.05,phase:1.0}]),
+    },
+    {
+      id:'sierra', name:'SIERRA CIRCUIT', tagline:'A technical test track with wide, testing corners, Catalunya-inspired.',
+      width:150, drsFrom:0, drsTo:1, kerb:'#C41E3A', baseSpeed:270, topSpeed:308,
+      points: compoundLoop(0,0,375,250,22,[{freq:4,amp:0.12,phase:1.3},{freq:2,amp:0.08,phase:0}]),
+    },
+    {
+      id:'isle', name:'ISLE CIRCUIT', tagline:'A long island straight into chicanes, Montreal-inspired.',
+      width:160, drsFrom:0, drsTo:1, kerb:'#FF3B81', baseSpeed:295, topSpeed:338,
+      points: compoundLoop(0,0,410,240,22,[{freq:2,amp:0.11,phase:0.8},{freq:7,amp:0.06,phase:2.2}]),
+    },
+    {
+      id:'amphitheater', name:'AMPHITHEATER CIRCUIT', tagline:'A twisty, low-speed circuit where every corner matters, Hungaroring-inspired.',
+      width:130, drsFrom:0, drsTo:1, kerb:'#7CFC00', baseSpeed:255, topSpeed:290,
+      points: compoundLoop(0,0,350,235,24,[{freq:5,amp:0.13,phase:0.4},{freq:2,amp:0.07,phase:1.9}]),
+    },
+    {
+      id:'dunebank', name:'DUNE BANKING CIRCUIT', tagline:'Flowing seaside curves with banked sweeps, Zandvoort-inspired.',
+      width:145, drsFrom:0, drsTo:1, kerb:'#FF7F50', baseSpeed:275, topSpeed:312,
+      points: compoundLoop(0,0,365,245,22,[{freq:3,amp:0.15,phase:1.6},{freq:1,amp:0.07,phase:0}]),
+    },
+    {
+      id:'marinanights', name:'MARINA NIGHTS CIRCUIT', tagline:'A tight, glittering street track under the lights, Singapore-inspired.',
+      width:120, drsFrom:0, drsTo:1, kerb:'#9B59B6', baseSpeed:245, topSpeed:278,
+      points: compoundLoop(0,0,340,235,26,[{freq:6,amp:0.12,phase:0.2},{freq:3,amp:0.08,phase:1.4}]),
+    },
+    {
+      id:'corniche', name:'CORNICHE CIRCUIT', tagline:'Flowing desert curves built for high speed, Qatar-inspired.',
+      width:170, drsFrom:0, drsTo:1, kerb:'#40E0D0', baseSpeed:298, topSpeed:340,
+      points: compoundLoop(0,0,410,235,22,[{freq:2,amp:0.13,phase:2.1},{freq:5,amp:0.05,phase:0.6}]),
+    },
+    {
+      id:'neonstrip', name:'NEON STRIP CIRCUIT', tagline:'Long straights lit up in neon, Las Vegas-inspired.',
+      width:180, drsFrom:0, drsTo:1, kerb:'#FF1493', baseSpeed:308, topSpeed:352,
+      points: compoundLoop(0,0,450,205,20,[{freq:1,amp:0.11,phase:0},{freq:3,amp:0.05,phase:1.1}]),
+    },
+    {
+      id:'altitude', name:'ALTITUDE STADIUM CIRCUIT', tagline:'A thin-air circuit through a packed stadium section, Mexico City-inspired.',
+      width:155, drsFrom:0, drsTo:1, kerb:'#2ECC71', baseSpeed:285, topSpeed:322,
+      points: compoundLoop(0,0,385,240,22,[{freq:2,amp:0.12,phase:1.0},{freq:4,amp:0.06,phase:2.3}]),
+    },
+    {
+      id:'marinasunset', name:'MARINA SUNSET CIRCUIT', tagline:'A twilight lap around the marina, Yas Marina-inspired.',
+      width:160, drsFrom:0, drsTo:1, kerb:'#F39C12', baseSpeed:280, topSpeed:318,
+      points: compoundLoop(0,0,390,245,24,[{freq:3,amp:0.12,phase:0.7},{freq:6,amp:0.05,phase:1.6}]),
+    },
+    {
+      id:'oldtown', name:'OLD TOWN CIRCUIT', tagline:'The longest straight on the calendar into a castle-tight final sector, Baku-inspired.',
+      width:150, drsFrom:0, drsTo:1, kerb:'#1ABC9C', baseSpeed:300, topSpeed:355,
+      points: compoundLoop(0,0,430,220,22,[{freq:1,amp:0.14,phase:0},{freq:8,amp:0.06,phase:1.0}]),
+    },
+    {
+      id:'bayfront', name:'BAYFRONT CIRCUIT', tagline:'A stadium-front street circuit around the bay, Miami-inspired.',
+      width:140, drsFrom:0, drsTo:1, kerb:'#00BFFF', baseSpeed:270, topSpeed:305,
+      points: compoundLoop(0,0,365,235,24,[{freq:4,amp:0.12,phase:1.8},{freq:2,amp:0.07,phase:0.3}]),
+    },
+    {
+      id:'autodromoridge', name:'AUTODROMO RIDGE', tagline:'An old-school, flowing ridge circuit, Imola-inspired.',
+      width:135, drsFrom:0, drsTo:1, kerb:'#B22222', baseSpeed:265, topSpeed:300,
+      points: compoundLoop(0,0,355,240,22,[{freq:3,amp:0.13,phase:0.4},{freq:5,amp:0.06,phase:1.9}]),
+    },
+    {
+      id:'cornichespeed', name:'CORNICHE SPEED CIRCUIT', tagline:'The fastest street walls on the calendar, Jeddah-inspired.',
+      width:150, drsFrom:0, drsTo:1, kerb:'#E67E22', baseSpeed:305, topSpeed:348,
+      points: compoundLoop(0,0,415,225,22,[{freq:2,amp:0.10,phase:1.3},{freq:6,amp:0.05,phase:0.5}]),
+    },
   ];
 
   // ---------- Mutable runtime track state ----------
@@ -663,7 +823,7 @@
     currentTrack = track;
     points = fitAndCenter(track.points, track.width);
     N = points.length;
-    TRACK_W = track.width; CHECK_R = Math.max(track.width*1.3, 150);
+    TRACK_W = track.width; CHECK_R = Math.max(track.width*0.85, 95);
     DRS_FROM = track.drsFrom; DRS_TO = track.drsTo;
     trackPath = buildPath2D(points);
     TRACK_MAX_PX = track.baseSpeed / CONV;
@@ -682,11 +842,15 @@
       laps:0, lastLapTime:0, bestLap:null, lapStart:0,
       finished:false, finishTime:null, baseSpeed:0,
       wandFreq: 0.4+Math.random()*0.5, wandPhase: Math.random()*Math.PI*2,
-      trackLimitStrikes:0, penaltyMs:0, _wasBeyondLimit:false,
+      trackLimitStrikes:0, penaltyMs:0, _wasFullyOff:false,
     };
   }
 
   const player = makeCar('YOU', PLAYER_COLOR, true, 1);
+  player.secondaryColor = '#FFFFFF';
+  player.pattern = 'solid';
+  player.decal = '★';
+  player.number = 7;
   let ai = [];
   let allCars = [player];
 
@@ -730,6 +894,11 @@
   // ---------- Input ----------
   const keys = {};
   window.addEventListener('keydown', e=>{
+    const typing = document.activeElement && (document.activeElement.tagName==='INPUT' || document.activeElement.tagName==='TEXTAREA');
+    if(typing){
+      if(e.key === 'Enter') handleEnter();
+      return;
+    }
     if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
     keys[e.key.toLowerCase()] = true;
     if(e.key === 'Enter') handleEnter();
@@ -775,7 +944,18 @@
     if(e.target.closest('.track-card') || e.target.closest('.start-btn') || e.target.closest('input')) return;
     handleEnter();
   });
-  document.getElementById('nextRaceOverlay').addEventListener('click', ()=> handleEnter());
+  document.getElementById('nextSkipQualyBtn').addEventListener('click', e=>{
+    e.stopPropagation(); qualifyingEnabled = false; startNextRace();
+  });
+  document.getElementById('nextStartQualyBtn').addEventListener('click', e=>{
+    e.stopPropagation(); qualifyingEnabled = true; startNextRace();
+  });
+  document.getElementById('nextSeasonBtn').addEventListener('click', e=>{
+    e.stopPropagation(); startNewSeason();
+  });
+  document.getElementById('seasonHomeBtn').addEventListener('click', e=>{
+    e.stopPropagation(); goHome();
+  });
   document.getElementById('qualyResultsOverlay').addEventListener('click', ()=> handleEnter());
 
   function bindHold(el, onFn, offFn){
@@ -790,7 +970,8 @@
   }
 
   // ---------- State machine ----------
-  let state = 'start'; // start, setup, countdown, racing, finished
+  let state = 'username'; // username, start, setup, countdown, racing, qualifying, finished
+  const usernameOverlay = document.getElementById('usernameOverlay');
   const startOverlay = document.getElementById('startOverlay');
   const setupOverlay = document.getElementById('setupOverlay');
   const countdownOverlay = document.getElementById('countdownOverlay');
@@ -801,9 +982,29 @@
   let raceStartTS = 0, raceElapsed = 0;
   let selectedTrackId = TRACKS[0].id;
 
+  function submitUsername(){
+    const input = document.getElementById('usernameInput');
+    const raw = input.value.trim().toUpperCase();
+    player.name = raw ? raw.slice(0,14) : 'YOU';
+    usernameOverlay.classList.add('hidden');
+    document.getElementById('designOverlay').classList.remove('hidden');
+    state = 'design';
+    renderDesignPreview();
+  }
+
+  function finishDesign(){
+    const numInput = document.getElementById('carNumberInput');
+    const n = parseInt(numInput.value, 10);
+    player.number = (Number.isFinite(n) && n>0 && n<100) ? n : 7;
+    document.getElementById('designOverlay').classList.add('hidden');
+    startOverlay.classList.remove('hidden');
+    state = 'start';
+  }
+
   // ---------- Career mode ----------
   let gameMode = 'quick'; // 'quick' or 'career'
   let careerRaceIndex = 0;
+  let careerSeason = 1;
   let careerPoints = {};
   const POINTS_TABLE = [25,18,15,12,10,8,6,4,2,1];
   function pointsForPos(pos){ return POINTS_TABLE[pos-1] || 0; }
@@ -849,18 +1050,24 @@
     clearConfetti();
     gameMode = 'quick';
     careerRaceIndex = 0;
+    careerSeason = 1;
     careerPoints = {};
     state = 'start';
     startOverlay.classList.remove('hidden');
   }
 
   function handleEnter(){
-    if(state === 'start'){ gameMode = 'quick'; showSetup(); }
+    if(state === 'username'){ submitUsername(); }
+    else if(state === 'design'){ finishDesign(); }
+    else if(state === 'start'){ gameMode = 'quick'; showSetup(); }
     else if(state === 'setup'){ beginRace(); }
-    else if(state === 'nextrace'){ startNextRace(); }
+    else if(state === 'nextrace'){ qualifyingEnabled = false; startNextRace(); }
     else if(state === 'qualyresults'){ startRaceAfterQualifying(); }
     else if(state === 'finished'){
-      if(gameMode === 'career'){ advanceCareer(); } else { showSetup(); }
+      if(gameMode === 'career'){
+        const isLastRace = careerRaceIndex >= TRACKS.length-1;
+        if(isLastRace){ startNewSeason(); } else { advanceCareer(); }
+      } else { showSetup(); }
     }
   }
 
@@ -879,8 +1086,8 @@
       selectedTrackId = TRACKS[careerRaceIndex].id;
       cardsEl.classList.add('hidden');
       calEl.classList.remove('hidden');
-      eyebrowEl.textContent = 'CAREER SETUP';
-      titleEl.textContent = '10-RACE SEASON';
+      eyebrowEl.textContent = 'CAREER SETUP — SEASON '+careerSeason;
+      titleEl.textContent = TRACKS.length+'-RACE SEASON';
       renderCalendarStrip();
     } else {
       cardsEl.classList.remove('hidden');
@@ -911,13 +1118,16 @@
 
   function advanceCareer(){
     careerRaceIndex++;
-    if(careerRaceIndex >= TRACKS.length){
-      gameMode = 'quick';
-      careerRaceIndex = 0;
-      showSetup();
-      return;
-    }
     selectedTrackId = TRACKS[careerRaceIndex].id;
+    resultsOverlay.classList.add('hidden');
+    showNextRacePreview();
+  }
+
+  function startNewSeason(){
+    careerSeason++;
+    careerRaceIndex = 0;
+    careerPoints = {};
+    selectedTrackId = TRACKS[0].id;
     resultsOverlay.classList.add('hidden');
     showNextRacePreview();
   }
@@ -925,7 +1135,8 @@
   function showNextRacePreview(){
     state = 'nextrace';
     const track = TRACKS[careerRaceIndex];
-    document.getElementById('nextRaceNum').textContent = (careerRaceIndex+1)+' / '+TRACKS.length;
+    document.getElementById('nextRaceNum').textContent =
+      'S'+careerSeason+' · '+(careerRaceIndex+1)+' / '+TRACKS.length;
     document.getElementById('nextRaceName').textContent = track.name;
     document.getElementById('nextRaceTag').textContent = track.tagline;
     document.getElementById('nextRacePreview').innerHTML = trackPreviewSVG(track);
@@ -956,7 +1167,7 @@
       c.nextCP=1; c.segIdx=0; c.segT=0;
       c.laps=0; c.lastLapTime=0; c.bestLap=null; c.lapStart=0;
       c.finished=false; c.finishTime=null;
-      c.trackLimitStrikes=0; c.penaltyMs=0; c._wasBeyondLimit=false;
+      c.trackLimitStrikes=0; c.penaltyMs=0; c._wasFullyOff=false;
     });
     raceElapsed = 0;
     document.getElementById('limitsVal').textContent = '0 / 5';
@@ -1013,13 +1224,13 @@
       c.nextCP=1; c.segIdx=0; c.segT=0;
       c.laps=0; c.lastLapTime=0; c.bestLap=null; c.lapStart=0;
       c.finished=false; c.finishTime=null;
-      c.trackLimitStrikes=0; c.penaltyMs=0; c._wasBeyondLimit=false;
+      c.trackLimitStrikes=0; c.penaltyMs=0; c._wasFullyOff=false;
     });
     raceElapsed = 0;
     document.getElementById('limitsVal').textContent = '0 / 5';
     document.getElementById('penaltyToast').classList.remove('show');
     document.getElementById('trackVal').textContent = gameMode==='career'
-      ? 'RACE '+(careerRaceIndex+1)+'/'+TRACKS.length+' — '+track.name
+      ? 'S'+careerSeason+' · RACE '+(careerRaceIndex+1)+'/'+TRACKS.length+' — '+track.name
       : track.name;
     document.documentElement.style.setProperty('--accent-color', track.kerb);
   }
@@ -1093,8 +1304,7 @@
   function updatePlayer(dt){
     const onDRS = isInDRS((player.nextCP - 1 + N) % N);
     const distFromCenter = distToTrack(player);
-    const beyondLimit = distFromCenter > TRACK_W/2;              // cut the corner / exceeded track limits
-    const fullyOff = distFromCenter > TRACK_W/2 + KERB_ALLOWANCE; // actually off the racing surface — this is what slows you
+    const fullyOff = distFromCenter > TRACK_W/2 + KERB_ALLOWANCE; // actually off the racing surface
 
     let maxSpd = onDRS ? TRACK_DRS_PX : TRACK_MAX_PX;
     let accelMult = 1, dragMult = 1;
@@ -1116,9 +1326,10 @@
 
     enforceBoundary(player);
 
-    // Three-strikes track-limits system: laps and corner cuts always still count —
-    // this only tallies a time penalty, it never cancels anything.
-    if(beyondLimit && !player._wasBeyondLimit){
+    // Five-strikes track-limits system: laps and corner cuts always still count —
+    // this only tallies a time penalty, it never cancels anything. Riding the
+    // kerb is free; only actually leaving the racing surface counts as a strike.
+    if(fullyOff && !player._wasFullyOff){
       player.trackLimitStrikes++;
       if(player.trackLimitStrikes >= 5){
         player.penaltyMs += 1000;
@@ -1127,7 +1338,7 @@
       }
       updateLimitsHud();
     }
-    player._wasBeyondLimit = beyondLimit;
+    player._wasFullyOff = fullyOff;
 
     const targetPt = points[player.nextCP];
     let reached = false;
@@ -1162,7 +1373,7 @@
     const rx = car.x-p0.x, ry = car.y-p0.y;
     const proj = rx*ux + ry*uy;
     const lateral = rx*px + ry*py;
-    return Math.abs(lateral) < TRACK_W/2 + 180 && proj > -60 && proj < 100;
+    return Math.abs(lateral) < TRACK_W/2 + 40 && proj > -25 && proj < 45;
   }
 
   function updateAI(car, dt){
@@ -1327,16 +1538,20 @@
 
       if(isLastRace){
         const finalOrder = Object.entries(careerPoints).sort((a,b)=>b[1]-a[1]);
-        const champion = finalOrder[0] && finalOrder[0][0] === 'YOU';
+        const champion = finalOrder[0] && finalOrder[0][0] === player.name;
         document.getElementById('resultFlag').textContent = champion ? 'SEASON CHAMPION' : 'SEASON COMPLETE';
-        document.getElementById('resultPos').textContent = champion ? '🏆 CHAMPION' : 'P'+(finalOrder.findIndex(e=>e[0]==='YOU')+1)+' IN SEASON';
-        document.getElementById('resultsPrompt').textContent = 'TAP TO CONTINUE — MAIN MENU';
+        document.getElementById('resultPos').textContent = champion ? '🏆 CHAMPION' : 'P'+(finalOrder.findIndex(e=>e[0]===player.name)+1)+' IN SEASON';
+        document.getElementById('resultsPrompt').classList.add('hidden');
+        document.getElementById('seasonChoiceRow').classList.remove('hidden');
+        document.getElementById('nextSeasonBtn').textContent = 'START SEASON '+(careerSeason+1);
         resultsOverlay.classList.toggle('victory', champion);
         if(champion) spawnConfetti(); else clearConfetti();
       } else {
         document.getElementById('resultFlag').textContent = won ? 'RACE WIN' : 'RACE FINISHED';
         document.getElementById('resultPos').textContent = 'P'+p;
         document.getElementById('resultsPrompt').textContent = 'TAP TO CONTINUE — NEXT RACE';
+        document.getElementById('resultsPrompt').classList.remove('hidden');
+        document.getElementById('seasonChoiceRow').classList.add('hidden');
         resultsOverlay.classList.toggle('victory', won);
         if(won) spawnConfetti(); else clearConfetti();
       }
@@ -1345,6 +1560,8 @@
       document.getElementById('resultPos').textContent = 'P'+p;
       document.getElementById('resultFlag').textContent = won ? 'VICTORY' : 'RACE FINISHED';
       document.getElementById('resultsPrompt').textContent = 'TAP TO CONTINUE';
+      document.getElementById('resultsPrompt').classList.remove('hidden');
+      document.getElementById('seasonChoiceRow').classList.add('hidden');
       resultsOverlay.classList.toggle('victory', won);
       if(won) spawnConfetti(); else clearConfetti();
     }
@@ -1357,7 +1574,7 @@
     const rows = Object.entries(careerPoints).sort((a,b)=>b[1]-a[1]).slice(0,8);
     let html = '';
     rows.forEach(([name,pts],i)=>{
-      html += '<div class="cs-row'+(name==='YOU'?' me':'')+'">'
+      html += '<div class="cs-row'+(name===player.name?' me':'')+'">'
         + '<span>P'+(i+1)+' '+name+'</span><span class="cs-pts">'+pts+'</span>'
         + '</div>';
     });
@@ -1523,23 +1740,46 @@
     ctx.fillRect(-13,-10,6,7);
     ctx.fillRect(-13,3,6,7);
 
+    const isCustomPlayer = car.isPlayer;
+    const secondary = isCustomPlayer ? (car.secondaryColor||'#FFFFFF') : car.color;
+    const pattern = isCustomPlayer ? (car.pattern||'solid') : 'solid';
+
     ctx.fillStyle = car.color;
     ctx.fillRect(-19,-8,3,16);
+    ctx.fillStyle = secondary;
     ctx.fillRect(-20,-8,2,4);
     ctx.fillRect(-20,4,2,4);
 
-    ctx.beginPath();
-    ctx.moveTo(17,0);
-    ctx.lineTo(9,-5.5);
-    ctx.lineTo(-6,-6.5);
-    ctx.lineTo(-16,-4);
-    ctx.lineTo(-16,4);
-    ctx.lineTo(-6,6.5);
-    ctx.lineTo(9,5.5);
-    ctx.closePath();
+    function bodyPath(){
+      ctx.beginPath();
+      ctx.moveTo(17,0);
+      ctx.lineTo(9,-5.5);
+      ctx.lineTo(-6,-6.5);
+      ctx.lineTo(-16,-4);
+      ctx.lineTo(-16,4);
+      ctx.lineTo(-6,6.5);
+      ctx.lineTo(9,5.5);
+      ctx.closePath();
+    }
+
+    ctx.fillStyle = car.color;
+    bodyPath();
     ctx.fill();
 
+    if(pattern !== 'solid'){
+      ctx.save();
+      bodyPath();
+      ctx.clip();
+      ctx.fillStyle = secondary;
+      if(pattern === 'stripe'){ ctx.fillRect(-3,-8,6,16); }
+      else if(pattern === 'split'){ ctx.fillRect(-16,-8,15,16); }
+      else if(pattern === 'nose'){ ctx.fillRect(7,-8,10,16); }
+      ctx.restore();
+    }
+
+    ctx.fillStyle = car.color;
     ctx.fillRect(13,-8,3,16);
+    ctx.fillStyle = secondary;
     ctx.fillRect(15,-8,2,4);
     ctx.fillRect(15,4,2,4);
 
@@ -1548,8 +1788,34 @@
     ctx.strokeStyle = '#111'; ctx.lineWidth = 1.4;
     ctx.beginPath(); ctx.arc(1,0,3.6,Math.PI*1.1,Math.PI*1.9); ctx.stroke();
 
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.fillRect(-3,-1.2,5,2.4);
+    if(isCustomPlayer && car.number){
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillRect(-9.5,-3,7,6);
+      ctx.fillStyle = '#111';
+      ctx.font = 'bold 5px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.save();
+      ctx.translate(-6,0);
+      ctx.rotate(-car.angle);
+      ctx.fillText(String(car.number).slice(0,2), 0, 0.3);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.fillRect(-3,-1.2,5,2.4);
+    }
+
+    if(isCustomPlayer && car.decal && car.decal !== 'none'){
+      ctx.save();
+      ctx.translate(6,-4.5);
+      ctx.rotate(-car.angle);
+      ctx.font = '6px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = secondary;
+      ctx.fillText(car.decal, 0, 0);
+      ctx.restore();
+    }
 
     if(car._onDRS){
       ctx.shadowColor = '#12E37F'; ctx.shadowBlur = 16;
@@ -1635,6 +1901,124 @@
 
   document.getElementById('startQualyBtn').addEventListener('click', ()=>{ qualifyingEnabled = true; beginRace(); });
   document.getElementById('skipQualyBtn').addEventListener('click', ()=>{ qualifyingEnabled = false; beginRace(); });
+  document.getElementById('usernameSubmitBtn').addEventListener('click', submitUsername);
+  try{ document.getElementById('usernameInput').focus(); }catch(e){}
+
+  // ---------- Car design ----------
+  const PRIMARY_COLORS = [PLAYER_COLOR,'#E10600','#2E7CFF','#FFD400','#12E37F','#FF6A00','#8C52FF','#00C2D1','#FF2E92','#FFFFFF','#111111'];
+  const SECONDARY_COLORS = ['#FFFFFF','#111111','#E10600','#2E7CFF','#FFD400','#12E37F','#FF6A00','#8C52FF','#00C2D1','#C6FF00'];
+  const PATTERNS = [{id:'solid',label:'SOLID'},{id:'stripe',label:'STRIPE'},{id:'split',label:'SPLIT'},{id:'nose',label:'NOSE'}];
+  const DECALS = [{id:'★',label:'★'},{id:'⚡',label:'⚡'},{id:'♦',label:'♦'},{id:'●',label:'●'},{id:'▲',label:'▲'},{id:'none',label:'NONE'}];
+
+  function buildSwatches(containerId, colors, current, onPick){
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+    colors.forEach(c=>{
+      const sw = document.createElement('div');
+      sw.className = 'swatch' + (c.toLowerCase()===current.toLowerCase() ? ' selected' : '');
+      sw.style.background = c;
+      sw.addEventListener('click', ()=>{
+        el.querySelectorAll('.swatch').forEach(s=> s.classList.remove('selected'));
+        sw.classList.add('selected');
+        onPick(c);
+      });
+      el.appendChild(sw);
+    });
+  }
+
+  function buildOptions(containerId, opts, current, onPick){
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+    opts.forEach(o=>{
+      const btn = document.createElement('div');
+      btn.className = 'opt-btn' + (o.id===current ? ' selected' : '');
+      btn.textContent = o.label;
+      btn.addEventListener('click', ()=>{
+        el.querySelectorAll('.opt-btn').forEach(b=> b.classList.remove('selected'));
+        btn.classList.add('selected');
+        onPick(o.id);
+      });
+      el.appendChild(btn);
+    });
+  }
+
+  function refreshDesignUI(){
+    buildSwatches('primarySwatches', PRIMARY_COLORS, player.color, c=>{ player.color=c; renderDesignPreview(); });
+    buildSwatches('secondarySwatches', SECONDARY_COLORS, player.secondaryColor, c=>{ player.secondaryColor=c; renderDesignPreview(); });
+    buildOptions('patternOptions', PATTERNS, player.pattern, p=>{ player.pattern=p; renderDesignPreview(); });
+    buildOptions('decalOptions', DECALS, player.decal, d=>{ player.decal=d; renderDesignPreview(); });
+  }
+  refreshDesignUI();
+
+  const designCanvas = document.getElementById('designPreview');
+  const designCtx = designCanvas.getContext('2d');
+  function renderDesignPreview(){
+    designCtx.clearRect(0,0,designCanvas.width,designCanvas.height);
+    const cx = designCanvas.width/2, cy = designCanvas.height/2;
+    const scale = 3.4;
+    designCtx.save();
+    designCtx.translate(cx, cy);
+    designCtx.rotate(0);
+    designCtx.scale(scale, scale);
+
+    designCtx.fillStyle = 'rgba(0,0,0,0.4)';
+    designCtx.beginPath(); designCtx.ellipse(1,3,17,9,0,0,Math.PI*2); designCtx.fill();
+
+    designCtx.fillStyle = '#161616';
+    designCtx.fillRect(9,-10,6,7); designCtx.fillRect(9,3,6,7);
+    designCtx.fillRect(-13,-10,6,7); designCtx.fillRect(-13,3,6,7);
+
+    const primary = player.color, secondary = player.secondaryColor, pattern = player.pattern;
+
+    designCtx.fillStyle = primary;
+    designCtx.fillRect(-19,-8,3,16);
+    designCtx.fillStyle = secondary;
+    designCtx.fillRect(-20,-8,2,4); designCtx.fillRect(-20,4,2,4);
+
+    function bodyPath(){
+      designCtx.beginPath();
+      designCtx.moveTo(17,0); designCtx.lineTo(9,-5.5); designCtx.lineTo(-6,-6.5);
+      designCtx.lineTo(-16,-4); designCtx.lineTo(-16,4); designCtx.lineTo(-6,6.5);
+      designCtx.lineTo(9,5.5); designCtx.closePath();
+    }
+    designCtx.fillStyle = primary; bodyPath(); designCtx.fill();
+    if(pattern !== 'solid'){
+      designCtx.save(); bodyPath(); designCtx.clip();
+      designCtx.fillStyle = secondary;
+      if(pattern==='stripe'){ designCtx.fillRect(-3,-8,6,16); }
+      else if(pattern==='split'){ designCtx.fillRect(-16,-8,15,16); }
+      else if(pattern==='nose'){ designCtx.fillRect(7,-8,10,16); }
+      designCtx.restore();
+    }
+
+    designCtx.fillStyle = primary;
+    designCtx.fillRect(13,-8,3,16);
+    designCtx.fillStyle = secondary;
+    designCtx.fillRect(15,-8,2,4); designCtx.fillRect(15,4,2,4);
+
+    designCtx.fillStyle = '#111';
+    designCtx.beginPath(); designCtx.ellipse(1,0,3.4,2.6,0,0,Math.PI*2); designCtx.fill();
+
+    const numInput = document.getElementById('carNumberInput');
+    const num = numInput ? numInput.value : '7';
+    designCtx.fillStyle = 'rgba(255,255,255,0.9)';
+    designCtx.fillRect(-9.5,-3,7,6);
+    designCtx.fillStyle = '#111';
+    designCtx.font = 'bold 5px "JetBrains Mono", monospace';
+    designCtx.textAlign = 'center'; designCtx.textBaseline = 'middle';
+    designCtx.fillText(String(num).slice(0,2), -6, 0.3);
+
+    if(player.decal && player.decal !== 'none'){
+      designCtx.font = '6px sans-serif';
+      designCtx.textAlign = 'center'; designCtx.textBaseline = 'middle';
+      designCtx.fillStyle = secondary;
+      designCtx.fillText(player.decal, 6, -4.5);
+    }
+    designCtx.restore();
+  }
+  document.getElementById('carNumberInput').addEventListener('input', renderDesignPreview);
+  document.getElementById('designContinueBtn').addEventListener('click', finishDesign);
+
   document.getElementById('quickRaceBtn').addEventListener('click', ()=>{ gameMode='quick'; showSetup(); });
   document.getElementById('careerModeBtn').addEventListener('click', ()=>{
     gameMode='career'; careerRaceIndex=0; careerPoints={}; selectedTrackId=TRACKS[0].id; showSetup();
@@ -1650,7 +2034,8 @@
     const save = {
       version: 1,
       savedAt: new Date().toISOString(),
-      gameMode, careerRaceIndex, careerPoints,
+      playerName: player.name,
+      gameMode, careerRaceIndex, careerSeason, careerPoints,
       selectedTrackId, OPPONENT_COUNT, LAPS_TO_WIN, DIFFICULTY,
     };
     const blob = new Blob([JSON.stringify(save, null, 2)], {type:'application/json'});
@@ -1669,8 +2054,10 @@
     reader.onload = ()=>{
       try{
         const save = JSON.parse(reader.result);
+        if(save.playerName) player.name = String(save.playerName).slice(0,14);
         gameMode = save.gameMode === 'career' ? 'career' : 'quick';
         careerRaceIndex = Math.max(0, Math.min(TRACKS.length-1, save.careerRaceIndex||0));
+        careerSeason = Math.max(1, save.careerSeason||1);
         careerPoints = save.careerPoints || {};
         OPPONENT_COUNT = save.OPPONENT_COUNT || OPPONENT_COUNT;
         LAPS_TO_WIN = save.LAPS_TO_WIN || LAPS_TO_WIN;
