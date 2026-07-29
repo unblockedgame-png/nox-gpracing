@@ -14,7 +14,7 @@
     --white-kerb:#F2F0EA;
     --green-drs:#12E37F;
     --yellow-warn:#FFD400;
-    --text-dim:#8b939b;
+    --text-dim:#9aa4c2;
     --panel-bg:rgba(10,12,15,0.72);
     --accent: var(--red-race);
   }
@@ -52,10 +52,12 @@
     padding:6px 14px;
     backdrop-filter:blur(2px);
   }
+  .hud-box .value{ text-shadow:0 0 10px rgba(255,255,255,0.35); }
+  .hud-box .label{ text-shadow:0 0 6px rgba(154,164,194,0.4); }
 
   #posBox{ top:14px; left:14px; }
   #posBox .label{ font-size:10px; letter-spacing:2px; color:var(--text-dim); }
-  #posBox .value{ font-size:26px; font-weight:900; font-family:'JetBrains Mono',monospace; line-height:1; }
+  #posBox .value{ font-size:26px; font-weight:900; font-family:'JetBrains Mono',monospace; line-height:1; color:#fff; text-shadow:0 0 12px rgba(225,6,0,0.6); }
 
   #lapBox{ top:14px; right:14px; text-align:right; border-left:none; border-right:3px solid var(--red-race);}
   #lapBox .label{ font-size:10px; letter-spacing:2px; color:var(--text-dim); }
@@ -63,13 +65,13 @@
 
   #timeBox{ top:14px; left:50%; transform:translateX(-50%); text-align:center; border-left:3px solid var(--yellow-warn); }
   #timeBox .label{ font-size:10px; letter-spacing:2px; color:var(--text-dim); }
-  #timeBox .value{ font-size:22px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+  #timeBox .value{ font-size:22px; font-weight:700; font-family:'JetBrains Mono',monospace; color:#fff8dd; text-shadow:0 0 10px rgba(255,212,0,0.6); }
 
   #trackBox{ bottom:14px; left:50%; transform:translateX(-50%); text-align:center; border-left:3px solid var(--text-dim); max-width:70%; }
   #trackBox .value{ font-size:11px; font-weight:700; letter-spacing:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
   #speedBox{ top:64px; right:14px; text-align:right; border-left:none; border-right:3px solid var(--red-race); }
-  #speedBox .value{ font-size:30px; font-weight:900; font-family:'JetBrains Mono',monospace; }
+  #speedBox .value{ font-size:30px; font-weight:900; font-family:'JetBrains Mono',monospace; color:#fff; text-shadow:0 0 14px rgba(225,6,0,0.65); }
   #speedBox .unit{ font-size:11px; color:var(--text-dim); letter-spacing:1px; }
 
   #drsBox{
@@ -117,14 +119,6 @@
   }
   #pauseBtn:hover{ border-color:var(--yellow-warn); }
 
-  #muteBtn{
-    position:absolute; top:14px; left:50%; transform:translateX(162px);
-    width:34px; height:34px; border-radius:50%; pointer-events:auto; cursor:pointer;
-    background:var(--panel-bg); border:1px solid rgba(255,255,255,0.15); color:#fff;
-    font-size:15px; display:flex; align-items:center; justify-content:center;
-  }
-  #muteBtn:hover{ border-color:var(--yellow-warn); }
-
   #leaderboard{
     position:absolute; bottom:14px; right:14px; width:126px; max-height:190px;
     overflow-y:auto; background:rgba(10,12,15,0.6); border:1px solid rgba(255,255,255,0.08);
@@ -140,7 +134,7 @@
   .lb-row .lb-pos{ color:var(--text-dim); width:17px; flex-shrink:0; }
   .lb-row .lb-chip{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
   .lb-row .lb-name{ overflow:hidden; text-overflow:ellipsis; }
-  .lb-row.me{ color:var(--yellow-warn); font-weight:700; }
+  .lb-row.me{ color:var(--yellow-warn); font-weight:700; text-shadow:0 0 8px rgba(255,212,0,0.55); }
 
   .overlay{
     position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -304,7 +298,7 @@
   .driver-row .dr-chip{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
   .driver-row .dr-name{ flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .driver-row .dr-team{ color:var(--text-dim); font-size:9.5px; }
-  .driver-row .dr-rating{ color:var(--yellow-warn); font-weight:700; min-width:26px; text-align:right; }
+  .driver-row .dr-rating{ color:var(--yellow-warn); font-weight:700; min-width:26px; text-align:right; text-shadow:0 0 6px rgba(255,212,0,0.5); }
 
   .calendar-strip{
     display:flex; gap:6px; overflow-x:auto; width:100%; max-width:560px; padding:4px 2px 8px;
@@ -326,8 +320,8 @@
     background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px;
     padding:6px 10px; text-align:left;
   }
-  .cs-row{ display:flex; justify-content:space-between; padding:2px 0; gap:8px; }
-  .cs-row.me{ color:var(--yellow-warn); font-weight:700; }
+  .cs-row{ display:flex; justify-content:space-between; padding:2px 0; gap:8px; color:#dfe3ee; }
+  .cs-row.me{ color:var(--yellow-warn); font-weight:700; text-shadow:0 0 8px rgba(255,212,0,0.55); }
   .cs-row .cs-pts{ color:var(--text-dim); }
   .cs-row.me .cs-pts{ color:var(--yellow-warn); }
 
@@ -484,6 +478,20 @@
   .podium-block.h1{ height:92px; color:var(--yellow-warn); box-shadow:0 -6px 24px rgba(255,212,0,0.25); }
   .podium-block.h2{ height:66px; }
   .podium-block.h3{ height:44px; }
+
+  .team-radio{
+    width:100%; max-width:380px; margin-top:10px; display:flex; flex-direction:column; gap:6px;
+    background:rgba(10,14,10,0.55); border:1px solid rgba(58,255,120,0.3);
+    border-left:3px solid #3aff78; border-radius:6px; padding:10px 12px;
+    box-shadow:0 0 20px rgba(58,255,120,0.12);
+  }
+  .radio-line{ display:flex; flex-direction:column; gap:2px; opacity:0; transform:translateY(4px); transition:opacity .35s, transform .35s; }
+  .radio-line.show{ opacity:1; transform:translateY(0); }
+  .radio-tag{
+    font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:1.5px; font-weight:700;
+    color:#8bffb0; text-shadow:0 0 6px rgba(58,255,120,0.6);
+  }
+  .radio-msg{ font-size:12.5px; color:#f0fff4; line-height:1.4; }
 </style>
 </head>
 <body>
@@ -498,7 +506,6 @@
     <div class="hud-box" id="trackBox"><div class="value" id="trackVal">NOX CIRCUIT</div></div>
     <div class="hud-box" id="speedBox"><div class="value" id="speedVal">0</div><div class="unit">KM/H</div></div>
     <div id="pauseBtn" title="Pause">☰</div>
-    <div id="muteBtn" title="Mute engine">🔊</div>
     <div class="hud-box" id="drsBox">DRS</div>
     <div class="hud-box" id="limitsBox"><div class="label">TRACK LIMITS</div><div class="value" id="limitsVal">0 / 5</div></div>
     <div class="hud-box hidden" id="fastestLapBox"><div class="label">FASTEST LAP</div><div class="value" id="fastestLapVal">--:--.-- —</div></div>
@@ -620,7 +627,7 @@
     <div class="setup-row">
       <label>DIFFICULTY <span id="diffLabel">60 — PRO</span></label>
       <input type="range" id="diffSlider" min="0" max="110" value="60">
-      <div class="diff-hint">RECOMMENDED AI DIFFICULTY: 80</div>
+      <div class="diff-hint">RECOMMENDED AI DIFFICULTY: 76</div>
     </div>
     <div class="qualy-choice-row">
       <button class="start-btn ghost-btn" id="skipQualyBtn">SKIP QUALIFYING</button>
@@ -656,6 +663,10 @@
     <div class="results-grid">
       <div><span class="k">RACE TIME</span><span id="resultTime">00:00.00</span></div>
       <div><span class="k">BEST LAP</span><span id="resultBest">00:00.00</span></div>
+    </div>
+    <div class="team-radio hidden" id="teamRadioBox">
+      <div class="radio-line" id="radioLine1"><span class="radio-tag">📻 RACE ENGINEER</span><span class="radio-msg" id="radioMsg1"></span></div>
+      <div class="radio-line" id="radioLine2"><span class="radio-tag" id="radioDriverTag">🏎 YOU</span><span class="radio-msg" id="radioMsg2"></span></div>
     </div>
     <div class="career-panel hidden" id="careerPanel">
       <div class="eyebrow" id="careerPointsLine">+18 POINTS</div>
@@ -1083,7 +1094,7 @@
   }
 
   function diffBand(v){
-    if(v===80) return 'ELITE — RECOMMENDED';
+    if(v===76) return 'ELITE — RECOMMENDED';
     if(v<=20) return 'ROOKIE';
     if(v<=45) return 'CLUBMAN';
     if(v<=70) return 'PRO';
@@ -1187,92 +1198,6 @@
 
   let raceStartTS = 0, raceElapsed = 0;
 
-  // ---------- Engine audio (procedurally synthesized — no audio files) ----------
-  let audioCtx = null;
-  let engineAudio = null;
-  let engineMuted = false;
-
-  function initAudio(){
-    if(audioCtx) return;
-    try{
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const master = audioCtx.createGain(); master.gain.value = 0;
-      master.connect(audioCtx.destination);
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'lowpass'; filter.frequency.value = 2200; filter.Q.value = 0.6;
-      filter.connect(master);
-
-      // fundamental growl
-      const osc1 = audioCtx.createOscillator(); osc1.type = 'sawtooth'; osc1.frequency.value = 70;
-      const g1 = audioCtx.createGain(); g1.gain.value = 0.42; osc1.connect(g1); g1.connect(filter);
-      // upper harmonic — adds the snarl
-      const osc2 = audioCtx.createOscillator(); osc2.type = 'sawtooth'; osc2.frequency.value = 105;
-      const g2 = audioCtx.createGain(); g2.gain.value = 0.24; osc2.connect(g2); g2.connect(filter);
-      // gritty edge harmonic
-      const osc3 = audioCtx.createOscillator(); osc3.type = 'square'; osc3.frequency.value = 140;
-      const g3 = audioCtx.createGain(); g3.gain.value = 0.14; osc3.connect(g3); g3.connect(filter);
-      // high turbo whine, bypasses the lowpass for a crisp top end like a modern F1 power unit
-      const osc4 = audioCtx.createOscillator(); osc4.type = 'sine'; osc4.frequency.value = 900;
-      const g4 = audioCtx.createGain(); g4.gain.value = 0.025; osc4.connect(g4); g4.connect(master);
-      // subtle noise layer for exhaust grit
-      const bufSize = audioCtx.sampleRate * 2;
-      const noiseBuf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-      const nd = noiseBuf.getChannelData(0);
-      for(let i=0;i<bufSize;i++) nd[i] = Math.random()*2-1;
-      const noise = audioCtx.createBufferSource(); noise.buffer = noiseBuf; noise.loop = true;
-      const noiseFilter = audioCtx.createBiquadFilter(); noiseFilter.type='bandpass'; noiseFilter.frequency.value=1200; noiseFilter.Q.value=0.5;
-      const gN = audioCtx.createGain(); gN.gain.value = 0.05;
-      noise.connect(noiseFilter); noiseFilter.connect(gN); gN.connect(master);
-
-      [osc1,osc2,osc3,osc4].forEach(o=> o.start());
-      noise.start();
-      engineAudio = {master, filter, osc1,osc2,osc3,osc4, g1,g2,g3,g4};
-    }catch(err){ audioCtx = null; engineAudio = null; }
-  }
-
-  function updateEngineSound(){
-    if(!engineAudio || !audioCtx) return;
-    const now = audioCtx.currentTime;
-    const active = (state==='racing' || state==='qualifying') && !engineMuted;
-    if(!active){
-      engineAudio.master.gain.setTargetAtTime(0, now, 0.15);
-      return;
-    }
-    const topSpeed = TRACK_MAX_PX || 220;
-    const speedFrac = Math.max(0, Math.min(1, Math.abs(player.speed)/topSpeed));
-    // Simulate gear steps so the pitch rises then resets like a real gearbox
-    // instead of climbing in one smooth continuous sweep.
-    const gears = 6;
-    const span = 1/gears;
-    const gearIdx = Math.min(gears-1, Math.floor(speedFrac/span));
-    const withinGear = (speedFrac - gearIdx*span)/span;
-    const rpmFrac = 0.4 + withinGear*0.6;
-    const baseFreq = 55 + rpmFrac*250;
-    const throttleOn = up() && !player._offTrack;
-    const targetVol = (throttleOn ? 0.85 : 0.5) * (0.5 + speedFrac*0.5);
-
-    engineAudio.osc1.frequency.setTargetAtTime(baseFreq, now, 0.04);
-    engineAudio.osc2.frequency.setTargetAtTime(baseFreq*1.5, now, 0.04);
-    engineAudio.osc3.frequency.setTargetAtTime(baseFreq*2.01, now, 0.04);
-    engineAudio.osc4.frequency.setTargetAtTime(650 + rpmFrac*2200, now, 0.04);
-    engineAudio.filter.frequency.setTargetAtTime(900 + rpmFrac*4200, now, 0.05);
-    engineAudio.master.gain.setTargetAtTime(targetVol*0.4, now, 0.06);
-  }
-
-  function toggleEngineMute(){
-    engineMuted = !engineMuted;
-    const btn = document.getElementById('muteBtn');
-    if(btn) btn.textContent = engineMuted ? '🔇' : '🔊';
-  }
-
-  function primeAudioOnGesture(){
-    initAudio();
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-  }
-  window.addEventListener('pointerdown', primeAudioOnGesture, {once:true});
-  window.addEventListener('keydown', primeAudioOnGesture, {once:true});
-
 
   let selectedTrackId = TRACKS[0].id;
 
@@ -1354,6 +1279,7 @@
     document.getElementById('careerHubOverlay').classList.add('hidden');
     raceHud.style.visibility = 'hidden';
     clearConfetti();
+    hideTeamRadio();
     gameMode = 'quick';
     careerRaceIndex = 0;
     careerSeason = 1;
@@ -1376,7 +1302,7 @@
       if(gameMode === 'career'){
         const isLastRace = careerRaceIndex >= seasonTracks.length-1;
         if(isLastRace){ startNewSeason(); } else { advanceCareer(); }
-      } else { showSetup(); }
+      } else { hideTeamRadio(); showSetup(); }
     }
   }
 
@@ -1438,6 +1364,7 @@
     careerRaceIndex++;
     selectedTrackId = seasonTracks[careerRaceIndex].id;
     resultsOverlay.classList.add('hidden');
+    hideTeamRadio();
     showNextRacePreview();
   }
 
@@ -1446,6 +1373,7 @@
     careerRaceIndex = 0;
     careerPoints = {};
     resultsOverlay.classList.add('hidden');
+    hideTeamRadio();
     showSetup();
   }
 
@@ -1925,6 +1853,76 @@
     document.getElementById('victoryFlash').classList.remove('flash');
   }
 
+  // ---------- Team radio (victory celebration) ----------
+  const ENGINEER_LINES = [
+    "That's P1! Absolutely brilliant drive out there!",
+    "Yes! Checkered flag, that's the win! Fantastic job!",
+    "P1! The whole garage is on its feet right now!",
+    "That's your win! Superb, superb drive today!",
+    "Come on!!! P1! What a way to take that one!",
+    "That's it, that's the race! Outstanding stuff!",
+  ];
+  const DRIVER_LINES = [
+    "Yes!! Let's go!! Thank you, team!",
+    "Come on!!! That's what I'm talking about!",
+    "Unbelievable! That one's for everyone back at the factory!",
+    "Yeah baby!! What a race, what a car!",
+    "Let's gooo! Thank you all, incredible effort!",
+    "That's for the team! Absolutely buzzing right now!",
+  ];
+
+  let radioTimer1 = null, radioTimer2 = null;
+
+  function speakLine(text){
+    try{
+      if(!window.speechSynthesis) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1.05; u.pitch = 1.0; u.volume = 0.8;
+      window.speechSynthesis.speak(u);
+    }catch(err){ /* speech unavailable — visual message still shows */ }
+  }
+
+  function playTeamRadio(){
+    const box = document.getElementById('teamRadioBox');
+    const line1 = document.getElementById('radioLine1');
+    const line2 = document.getElementById('radioLine2');
+    const msg1 = document.getElementById('radioMsg1');
+    const msg2 = document.getElementById('radioMsg2');
+    const tag2 = document.getElementById('radioDriverTag');
+
+    const engineerMsg = ENGINEER_LINES[Math.floor(Math.random()*ENGINEER_LINES.length)];
+    const driverMsg = DRIVER_LINES[Math.floor(Math.random()*DRIVER_LINES.length)];
+
+    msg1.textContent = engineerMsg;
+    msg2.textContent = driverMsg;
+    tag2.textContent = '🏎 ' + (player.name || 'YOU').toUpperCase();
+    line1.classList.remove('show');
+    line2.classList.remove('show');
+    box.classList.remove('hidden');
+
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+    if(radioTimer1) clearTimeout(radioTimer1);
+    if(radioTimer2) clearTimeout(radioTimer2);
+
+    radioTimer1 = setTimeout(()=>{
+      line1.classList.add('show');
+      speakLine(engineerMsg);
+    }, 500);
+    radioTimer2 = setTimeout(()=>{
+      line2.classList.add('show');
+      speakLine(driverMsg);
+    }, 2600);
+  }
+
+  function hideTeamRadio(){
+    document.getElementById('teamRadioBox').classList.add('hidden');
+    document.getElementById('radioLine1').classList.remove('show');
+    document.getElementById('radioLine2').classList.remove('show');
+    if(radioTimer1) clearTimeout(radioTimer1);
+    if(radioTimer2) clearTimeout(radioTimer2);
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+  }
+
   function showResults(){
     state = 'finished';
     const order = standings();
@@ -1958,7 +1956,7 @@
         document.getElementById('seasonChoiceRow').classList.remove('hidden');
         document.getElementById('nextSeasonBtn').textContent = 'START SEASON '+(careerSeason+1);
         resultsOverlay.classList.toggle('victory', champion);
-        if(champion) spawnConfetti(); else clearConfetti();
+        if(champion){ spawnConfetti(); playTeamRadio(); } else { clearConfetti(); hideTeamRadio(); }
       } else {
         document.getElementById('resultFlag').textContent = won ? 'RACE WIN' : 'RACE FINISHED';
         document.getElementById('resultPos').textContent = 'P'+p;
@@ -1966,7 +1964,7 @@
         document.getElementById('careerFinishRow').classList.remove('hidden');
         document.getElementById('seasonChoiceRow').classList.add('hidden');
         resultsOverlay.classList.toggle('victory', won);
-        if(won) spawnConfetti(); else clearConfetti();
+        if(won){ spawnConfetti(); playTeamRadio(); } else { clearConfetti(); hideTeamRadio(); }
       }
     } else {
       careerPanel.classList.add('hidden');
@@ -1977,7 +1975,7 @@
       document.getElementById('careerFinishRow').classList.add('hidden');
       document.getElementById('seasonChoiceRow').classList.add('hidden');
       resultsOverlay.classList.toggle('victory', won);
-      if(won) spawnConfetti(); else clearConfetti();
+      if(won){ spawnConfetti(); playTeamRadio(); } else { clearConfetti(); hideTeamRadio(); }
     }
 
     resultsOverlay.classList.remove('hidden');
@@ -2047,12 +2045,7 @@
     ctx.lineWidth = TRACK_W - 6;
     ctx.stroke(trackPath);
 
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-    ctx.lineWidth = 3;
-    ctx.setLineDash([14,18]);
-    ctx.stroke(trackPath);
-    ctx.setLineDash([]);
-
+    drawRacingLine();
     drawDirectionArrows();
 
     const a = points[DRS_FROM], b = points[DRS_TO];
@@ -2094,6 +2087,48 @@
       ctx.closePath();
       ctx.fill();
     }
+  }
+
+  function drawRacingLine(){
+    ctx.save();
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    // soft outer glow pass
+    ctx.strokeStyle = 'rgba(58,255,120,0.25)';
+    ctx.lineWidth = 9;
+    ctx.setLineDash([]);
+    ctx.stroke(trackPath);
+    // crisp bright core
+    ctx.shadowColor = '#3aff78';
+    ctx.shadowBlur = 10;
+    ctx.strokeStyle = 'rgba(120,255,170,0.9)';
+    ctx.lineWidth = 2.4;
+    ctx.setLineDash([2, 14]);
+    ctx.lineDashOffset = -(performance.now()*0.03) % 16;
+    ctx.stroke(trackPath);
+    ctx.setLineDash([]);
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    // small directional chevrons along the line, denser than the grey track arrows
+    ctx.save();
+    ctx.strokeStyle = 'rgba(140,255,190,0.85)';
+    ctx.fillStyle = 'rgba(140,255,190,0.85)';
+    ctx.lineWidth = 2;
+    ctx.shadowColor = '#3aff78'; ctx.shadowBlur = 6;
+    for(let i=0;i<N;i++){
+      const a = points[i], b = points[(i+1)%N];
+      const segLen = dist(a,b);
+      if(segLen < 60) continue;
+      const ang = Math.atan2(b.y-a.y, b.x-a.x);
+      const mx = a.x + (b.x-a.x)*0.5, my = a.y + (b.y-a.y)*0.5;
+      ctx.save();
+      ctx.translate(mx,my); ctx.rotate(ang);
+      ctx.beginPath();
+      ctx.moveTo(-5,-5); ctx.lineTo(5,0); ctx.lineTo(-5,5);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
   }
 
   function drawDirectionArrows(){
@@ -2570,7 +2605,6 @@
     if(loadCareerFromStorage()) showSetup();
   });
   document.getElementById('pauseBtn').addEventListener('click', openPause);
-  document.getElementById('muteBtn').addEventListener('click', e=>{ e.stopPropagation(); toggleEngineMute(); });
   document.getElementById('resumeBtn').addEventListener('click', closePause);
   document.getElementById('restartBtn').addEventListener('click', restartRace);
   document.getElementById('homeBtn').addEventListener('click', goHome);
@@ -2685,7 +2719,6 @@
       updateHud();
       if(player.laps >= 1) finishQualifying();
     }
-    updateEngineSound();
     render();
     requestAnimationFrame(loop);
   }
