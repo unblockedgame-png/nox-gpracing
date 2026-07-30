@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>NOX GP — Grand Prix Circuits</title>
+<title>Alfie's F1 Game — Grand Prix Circuits</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
@@ -337,7 +337,8 @@
   #tcThrottle{ right:calc(16px + env(safe-area-inset-right)); flex-direction:column; align-items:center; }
   .tc-btn{
     pointer-events:auto; -webkit-user-select:none; user-select:none; touch-action:none;
-    width:clamp(58px, 9.5vw, 96px); height:clamp(58px, 9.5vw, 96px);
+    width:clamp(46px, calc(58px * var(--ui-scale, 1)), 72px);
+    height:clamp(46px, calc(58px * var(--ui-scale, 1)), 72px);
     border-radius:50%;
     background:
       radial-gradient(circle at 32% 28%, rgba(255,255,255,0.16), rgba(255,255,255,0.03) 45%),
@@ -364,7 +365,8 @@
   }
   #tcLeft.pressed, #tcRight.pressed{ --tc-glow: rgba(255,255,255,0.3); background:linear-gradient(160deg, rgba(46,124,255,0.35), rgba(10,12,15,0.85)); }
   #tcGas{
-    width:clamp(76px, 13vw, 130px); height:clamp(76px, 13vw, 130px);
+    width:clamp(56px, calc(72px * var(--ui-scale, 1)), 88px);
+    height:clamp(56px, calc(72px * var(--ui-scale, 1)), 88px);
     background:
       radial-gradient(circle at 32% 28%, rgba(255,255,255,0.18), rgba(255,255,255,0.02) 45%),
       linear-gradient(160deg, rgba(20,60,34,0.85), rgba(8,14,10,0.85));
@@ -372,7 +374,9 @@
   }
   #tcGas.pressed{ --tc-glow: rgba(18,227,127,0.45); background:linear-gradient(160deg, rgba(18,227,127,0.4), rgba(8,14,10,0.85)); }
   #tcBrake{
-    width:clamp(58px, 9.5vw, 96px); height:clamp(58px, 9.5vw, 96px); margin-top:clamp(8px, 1.4vw, 14px);
+    width:clamp(42px, calc(52px * var(--ui-scale, 1)), 64px);
+    height:clamp(42px, calc(52px * var(--ui-scale, 1)), 64px);
+    margin-top:clamp(6px, calc(10px * var(--ui-scale, 1)), 12px);
     background:
       radial-gradient(circle at 32% 28%, rgba(255,255,255,0.16), rgba(255,255,255,0.02) 45%),
       linear-gradient(160deg, rgba(70,16,12,0.85), rgba(12,6,6,0.85));
@@ -534,7 +538,7 @@
   </div>
 
   <div class="overlay" id="usernameOverlay">
-    <div class="eyebrow">WELCOME TO NOX GP</div>
+    <div class="eyebrow">WELCOME TO ALFIE'S F1 GAME</div>
     <h1 class="title" style="font-size:34px;">ENTER YOUR NAME</h1>
     <div class="sub">This is how you'll appear on the leaderboard and career standings in every race.</div>
     <input type="text" id="usernameInput" maxlength="14" placeholder="YOUR NAME" class="username-input" autocomplete="off">
@@ -572,7 +576,7 @@
 
   <div class="overlay hidden" id="startOverlay">
     <div class="eyebrow">ARCADE GRAND PRIX</div>
-    <h1 class="title">NOX GP</h1>
+    <h1 class="title" style="font-size:36px;">ALFIE'S F1 GAME</h1>
     <div class="sub">Arrow keys or WASD to steer. Race one-off on any circuit, or take on a full 24-race career season.</div>
     <button class="start-btn" id="quickRaceBtn">QUICK RACE</button>
     <button class="start-btn ghost-btn" id="careerModeBtn">CAREER MODE</button>
@@ -709,7 +713,7 @@
 <div class="overlay hidden" id="rotateOverlay">
   <div class="icon">📱</div>
   <h1 class="title" style="font-size:26px;">ROTATE YOUR DEVICE</h1>
-  <div class="sub">NOX GP plays best in landscape mode. Turn your phone or tablet sideways to continue.</div>
+  <div class="sub">Alfie's F1 Game plays best in landscape mode. Turn your phone or tablet sideways to continue.</div>
 </div>
 
 <script>
@@ -926,6 +930,7 @@
 
   // ---------- Mutable runtime track state ----------
   let points, N, TRACK_W, CHECK_R, DRS_FROM, DRS_TO, trackPath, floodlights, currentTrack;
+  let racingLineTrail, racingLinePath;
   let TRACK_MAX_PX, TRACK_DRS_PX;
 
   function buildPath2D(pts){
@@ -1001,6 +1006,31 @@
   }
   function distToTrack(p){ return nearestTrackPoint(p).d; }
 
+  // Computes an apex-hugging "fastest line" rather than the plain centerline:
+  // at each point, offsets toward the inside of the upcoming turn, proportional
+  // to how sharp that turn is — straights stay near center, corners cut in.
+  function computeRacingLine(pts, trackWidth){
+    const n = pts.length;
+    const maxOffset = trackWidth * 0.34;
+    const line = [];
+    for(let i=0;i<n;i++){
+      const prev = pts[(i-1+n)%n], curr = pts[i], next = pts[(i+1)%n];
+      const v1x = curr.x-prev.x, v1y = curr.y-prev.y;
+      const v2x = next.x-curr.x, v2y = next.y-curr.y;
+      const cross = v1x*v2y - v1y*v2x;
+      const dot = v1x*v2x + v1y*v2y;
+      const turnAngle = Math.atan2(cross, dot); // signed: + = right turn, - = left turn
+      const tx = v1x+v2x, ty = v1y+v2y;
+      const tLen = Math.hypot(tx,ty) || 1;
+      const ux = tx/tLen, uy = ty/tLen;
+      const px = -uy, py = ux; // rightward perpendicular
+      const sharpness = Math.max(-1, Math.min(1, turnAngle / 0.55));
+      const offset = sharpness * maxOffset;
+      line.push({ x: curr.x + px*offset, y: curr.y + py*offset });
+    }
+    return line;
+  }
+
   function buildRuntimeTrack(track, carCount){
     currentTrack = track;
     points = fitAndCenter(track.points, track.width);
@@ -1008,6 +1038,8 @@
     TRACK_W = track.width; CHECK_R = Math.max(track.width*0.85, 95);
     DRS_FROM = track.drsFrom; DRS_TO = track.drsTo;
     trackPath = buildPath2D(points);
+    racingLineTrail = computeRacingLine(points, TRACK_W);
+    racingLinePath = buildPath2D(racingLineTrail);
     TRACK_MAX_PX = track.baseSpeed / CONV;
     TRACK_DRS_PX = track.topSpeed / CONV;
     const step = Math.max(1, Math.floor(N/4));
@@ -1129,6 +1161,15 @@
   function right(){ return keys['arrowright'] || keys['d'] || tcRightOn; }
 
   const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+
+  function updateUIScale(){
+    const rect = document.getElementById('stage').getBoundingClientRect();
+    const scale = rect.width / 1000; // 1000 = internal canvas reference width
+    document.documentElement.style.setProperty('--ui-scale', scale.toFixed(3));
+  }
+  updateUIScale();
+  window.addEventListener('resize', updateUIScale);
+  window.addEventListener('orientationchange', ()=> setTimeout(updateUIScale, 200));
 
   const rotateOverlay = document.getElementById('rotateOverlay');
   function checkOrientation(){
@@ -1873,11 +1914,15 @@
 
   let radioTimer1 = null, radioTimer2 = null;
 
-  function speakLine(text){
+  function speakLine(text, speaker){
     try{
       if(!window.speechSynthesis) return;
       const u = new SpeechSynthesisUtterance(text);
-      u.rate = 1.05; u.pitch = 1.0; u.volume = 0.8;
+      if(speaker === 'driver'){
+        u.rate = 1.3; u.pitch = 1.45; u.volume = 1.0;
+      } else {
+        u.rate = 1.22; u.pitch = 1.25; u.volume = 1.0;
+      }
       window.speechSynthesis.speak(u);
     }catch(err){ /* speech unavailable — visual message still shows */ }
   }
@@ -1906,11 +1951,11 @@
 
     radioTimer1 = setTimeout(()=>{
       line1.classList.add('show');
-      speakLine(engineerMsg);
+      speakLine(engineerMsg, 'engineer');
     }, 500);
     radioTimer2 = setTimeout(()=>{
       line2.classList.add('show');
-      speakLine(driverMsg);
+      speakLine(driverMsg, 'driver');
     }, 2600);
   }
 
@@ -2096,7 +2141,7 @@
     ctx.strokeStyle = 'rgba(58,255,120,0.25)';
     ctx.lineWidth = 9;
     ctx.setLineDash([]);
-    ctx.stroke(trackPath);
+    ctx.stroke(racingLinePath);
     // crisp bright core
     ctx.shadowColor = '#3aff78';
     ctx.shadowBlur = 10;
@@ -2104,7 +2149,7 @@
     ctx.lineWidth = 2.4;
     ctx.setLineDash([2, 14]);
     ctx.lineDashOffset = -(performance.now()*0.03) % 16;
-    ctx.stroke(trackPath);
+    ctx.stroke(racingLinePath);
     ctx.setLineDash([]);
     ctx.shadowBlur = 0;
     ctx.restore();
@@ -2116,9 +2161,9 @@
     ctx.lineWidth = 2;
     ctx.shadowColor = '#3aff78'; ctx.shadowBlur = 6;
     for(let i=0;i<N;i++){
-      const a = points[i], b = points[(i+1)%N];
+      const a = racingLineTrail[i], b = racingLineTrail[(i+1)%N];
       const segLen = dist(a,b);
-      if(segLen < 60) continue;
+      if(segLen < 45) continue;
       const ang = Math.atan2(b.y-a.y, b.x-a.x);
       const mx = a.x + (b.x-a.x)*0.5, my = a.y + (b.y-a.y)*0.5;
       ctx.save();
@@ -2667,7 +2712,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'nox-gp-save.json';
+    a.download = 'alfies-f1-game-save.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
