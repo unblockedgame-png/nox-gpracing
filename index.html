@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Alfie's F1 Game — Grand Prix Circuits</title>
+<title>Nox GP Racing — Grand Prix Circuits</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
@@ -563,7 +563,7 @@
   </div>
 
   <div class="overlay" id="usernameOverlay">
-    <div class="eyebrow">WELCOME TO ALFIE'S F1 GAME</div>
+    <div class="eyebrow">WELCOME TO NOX GP RACING</div>
     <h1 class="title" style="font-size:34px;">ENTER YOUR NAME</h1>
     <div class="sub">This is how you'll appear on the leaderboard and career standings in every race.</div>
     <input type="text" id="usernameInput" maxlength="14" placeholder="YOUR NAME" class="username-input" autocomplete="off">
@@ -601,7 +601,7 @@
 
   <div class="overlay hidden" id="startOverlay">
     <div class="eyebrow">ARCADE GRAND PRIX</div>
-    <h1 class="title" style="font-size:36px;">ALFIE'S F1 GAME</h1>
+    <h1 class="title" style="font-size:36px;">NOX GP RACING</h1>
     <div class="sub">Arrow keys or WASD to steer. Race one-off on any circuit, or take on a full 24-race career season.</div>
     <button class="start-btn" id="quickRaceBtn">QUICK RACE</button>
     <button class="start-btn ghost-btn" id="careerModeBtn">CAREER MODE</button>
@@ -773,7 +773,7 @@
 <div class="overlay hidden" id="rotateOverlay">
   <div class="icon">📱</div>
   <h1 class="title" style="font-size:26px;">ROTATE YOUR DEVICE</h1>
-  <div class="sub">Alfie's F1 Game plays best in landscape mode. Turn your phone or tablet sideways to continue.</div>
+  <div class="sub">Nox GP Racing plays best in landscape mode. Turn your phone or tablet sideways to continue.</div>
 </div>
 
 <script>
@@ -3203,7 +3203,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'alfies-f1-game-save.json';
+    a.download = 'nox-gp-racing-save.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
