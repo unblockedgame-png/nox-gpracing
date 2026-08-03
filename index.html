@@ -322,6 +322,10 @@
   .driver-row .dr-name{ flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .driver-row .dr-team{ color:var(--text-dim); font-size:9.5px; }
   .driver-row .dr-rating{ color:var(--yellow-warn); font-weight:700; min-width:26px; text-align:right; text-shadow:0 0 6px rgba(255,212,0,0.5); }
+  .slot-delete{
+    color:var(--text-dim); font-size:14px; padding:2px 6px; border-radius:3px; flex-shrink:0;
+  }
+  .slot-delete:hover{ color:var(--red-race); background:rgba(225,6,0,0.15); }
 
   .calendar-strip{
     display:flex; gap:6px; overflow-x:auto; width:100%; max-width:560px; padding:4px 2px 8px;
@@ -628,10 +632,11 @@
     <button class="corner-home-btn" id="careerHubHomeBtn">⌂ HOME</button>
     <div class="eyebrow">CAREER MODE</div>
     <h1 class="title" style="font-size:32px;">CONTINUE YOUR STORY</h1>
-    <div class="sub">Start a fresh career, or load the season saved on this device.</div>
+    <div class="sub">Start a fresh career, or load one of your saved careers on this device.</div>
     <button class="start-btn" id="newCareerBtn">NEW CAREER</button>
     <button class="start-btn ghost-btn" id="loadCareerBtn">LOAD CAREER</button>
     <div class="sub" id="careerHubSaveInfo" style="margin-top:8px; font-size:11px;"></div>
+    <div class="driver-picker hidden" id="careerSlotsList" style="max-width:420px;"></div>
   </div>
 
   <div class="overlay hidden" id="setupOverlay">
@@ -863,6 +868,32 @@
   TEAM_NAMES.forEach((t,i)=>{ TEAM_COLORS[t] = hslToHex(Math.round(i*360/TEAM_NAMES.length), 78, 54); });
   DRIVER_POOL.forEach(d=> d.color = TEAM_COLORS[d.team]);
   const PLAYER_COLOR = hslToHex(84, 92, 56);
+
+  // ---------- Save / Load progress (storage keys + settings, declared early
+  // since car-design setup below depends on appSettings for unlock gating) ----------
+  const LOCAL_SAVE_KEY = 'noxgp_career_save_v1';
+  const RECORDS_KEY = 'alfie_track_records_v1';
+  const SETTINGS_KEY = 'alfie_settings_v1';
+
+  function loadRecords(){
+    try{ return JSON.parse(localStorage.getItem(RECORDS_KEY)) || {}; }catch(err){ return {}; }
+  }
+  function saveRecords(rec){
+    try{ localStorage.setItem(RECORDS_KEY, JSON.stringify(rec)); }catch(err){}
+  }
+  function loadSettings(){
+    try{ return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; }catch(err){ return {}; }
+  }
+  function saveSettings(s){
+    try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }catch(err){}
+  }
+
+  let appSettings = Object.assign({ colorblind:false, highestSeason:1 }, loadSettings());
+  function applyColorblindMode(){
+    document.documentElement.classList.toggle('colorblind', !!appSettings.colorblind);
+  }
+  applyColorblindMode();
+
 
   // ---------- Track library (10 circuits, realistic speed ratings in km/h) ----------
   const TRACKS = [
@@ -1322,20 +1353,6 @@
     const d = buf.getChannelData(0);
     for(let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
     return buf;
-  }
-
-  let lastScreechAt = 0;
-  function playTireScreech(){
-    if(!sfxCtx) return;
-    const now = performance.now();
-    if(now - lastScreechAt < 900) return;
-    lastScreechAt = now;
-    const src = sfxCtx.createBufferSource(); src.buffer = makeNoiseBuffer(0.35);
-    const bp = sfxCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1800; bp.Q.value=1.4;
-    const g = sfxCtx.createGain(); g.gain.setValueAtTime(0.16, sfxCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, sfxCtx.currentTime+0.35);
-    src.connect(bp); bp.connect(g); g.connect(sfxCtx.destination);
-    src.start(); src.stop(sfxCtx.currentTime+0.35);
   }
 
   function playCrowdRoar(){
@@ -1906,7 +1923,6 @@
     const turningHard = Math.abs(turnDir) > 0.5 && speedFrac2 > 0.55;
     if((fullyOff || turningHard) && speedFrac2 > 0.25){
       spawnSmoke(player, fullyOff);
-      playTireScreech();
     }
   }
 
@@ -3120,30 +3136,6 @@
   });
   updateColorblindBtn();
   document.getElementById('setupHomeBtn').addEventListener('click', e=>{ e.stopPropagation(); goHome(); });
-
-  // ---------- Save / Load progress ----------
-  const LOCAL_SAVE_KEY = 'noxgp_career_save_v1';
-  const RECORDS_KEY = 'alfie_track_records_v1';
-  const SETTINGS_KEY = 'alfie_settings_v1';
-
-  function loadRecords(){
-    try{ return JSON.parse(localStorage.getItem(RECORDS_KEY)) || {}; }catch(err){ return {}; }
-  }
-  function saveRecords(rec){
-    try{ localStorage.setItem(RECORDS_KEY, JSON.stringify(rec)); }catch(err){}
-  }
-  function loadSettings(){
-    try{ return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; }catch(err){ return {}; }
-  }
-  function saveSettings(s){
-    try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }catch(err){}
-  }
-
-  let appSettings = Object.assign({ colorblind:false, highestSeason:1 }, loadSettings());
-  function applyColorblindMode(){
-    document.documentElement.classList.toggle('colorblind', !!appSettings.colorblind);
-  }
-  applyColorblindMode();
 
   function buildSaveData(){
     return {
